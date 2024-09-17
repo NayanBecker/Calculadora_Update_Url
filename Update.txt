@@ -1,0 +1,138 @@
+using System;
+using System.Net.Http;
+using System.IO;
+
+class Program
+{
+    static void Main(string[] args)
+    {
+        if (VerificarAtualizacao())
+        {
+            Console.WriteLine("Há uma nova versão disponível! Deseja atualizar? (S/N)");
+            string resposta = Console.ReadLine();
+            if (resposta.ToUpper() == "S")
+            {
+                // Aqui você pode implementar a lógica de atualização (ex: baixar o novo executável).
+                Console.WriteLine("Atualizando...");
+                AtualizarCalculadora();
+            }
+            else
+            {
+                Console.WriteLine("Continuando com a versão atual.");
+                IniciarCalculadora();
+            }
+        }
+        else
+        {
+            Console.WriteLine("A versão está atualizada.");
+            IniciarCalculadora();
+        }
+    }
+
+    static bool VerificarAtualizacao()
+    {
+        // Versão atual do programa
+        string versaoAtual = "1.0.0"; // Exemplo
+
+        // Simulação de uma URL ou caminho de um arquivo que contém a versão mais recente
+        string urlArquivoVersaoRemota = "https://seusite.com/versao.txt";
+        string versaoRemota = "";
+
+        try
+        {
+            // Exemplo de como pegar a versão remota a partir de um arquivo na internet
+            using (HttpClient client = new HttpClient())
+            {
+                versaoRemota = client.GetStringAsync(urlArquivoVersaoRemota).Result.Trim();
+            }
+
+            // Alternativamente, pode ser um arquivo local
+            // string versaoRemota = File.ReadAllText("Caminho/para/versao.txt").Trim();
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Erro ao verificar versão: {ex.Message}");
+            return false;
+        }
+
+        Console.WriteLine($"Versão atual: {versaoAtual}");
+        Console.WriteLine($"Versão remota: {versaoRemota}");
+
+        // Comparar as versões
+        return versaoAtual != versaoRemota;
+    }
+
+    static void AtualizarCalculadora()
+    {
+        // Simulação de atualização (baixe e substitua o executável)
+        Console.WriteLine("Download da nova versão...");
+        // Aqui você pode implementar a lógica de download e substituição do arquivo.
+    }
+
+    static void IniciarCalculadora()
+    {
+        bool continuar = true;
+        while (continuar)
+        {
+            Console.Clear();
+            Console.WriteLine("Calculadora Simples");
+            Console.WriteLine("-------------------");
+            Console.WriteLine("Escolha a operação:");
+            Console.WriteLine("1. Soma");
+            Console.WriteLine("2. Subtração");
+            Console.WriteLine("3. Multiplicação");
+            Console.WriteLine("4. Divisão");
+            Console.WriteLine("5. Sair");
+            Console.Write("Opção: ");
+
+            string opcao = Console.ReadLine();
+
+            if (opcao == "5")
+            {
+                continuar = false;
+                break;
+            }
+
+            Console.Write("Digite o primeiro número: ");
+            double num1 = Convert.ToDouble(Console.ReadLine());
+
+            Console.Write("Digite o segundo número: ");
+            double num2 = Convert.ToDouble(Console.ReadLine());
+
+            double resultado = 0;
+
+            switch (opcao)
+            {
+                case "1":
+                    resultado = num1 + num2;
+                    Console.WriteLine($"Resultado da soma: {resultado}");
+                    break;
+                case "2":
+                    resultado = num1 - num2;
+                    Console.WriteLine($"Resultado da subtração: {resultado}");
+                    break;
+                case "3":
+                    resultado = num1 * num2;
+                    Console.WriteLine($"Resultado da multiplicação: {resultado}");
+                    break;
+                case "4":
+                    if (num2 != 0)
+                    {
+                        resultado = num1 / num2;
+                        Console.WriteLine($"Resultado da divisão: {resultado}");
+                    }
+                    else
+                    {
+                        Console.WriteLine("Erro: Divisão por zero não é permitida!");
+                    }
+                    break;
+                default:
+                    Console.WriteLine("Opção inválida.");
+                    break;
+            }
+
+            Console.WriteLine("\nPressione qualquer tecla para continuar...");
+            Console.ReadKey();
+        }
+    }
+}
